@@ -163,6 +163,9 @@ end)
 AddButton("🎭 | TRACK PANELİ", Color3.fromRGB(255, 200, 50), function() 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoTrack.lua"))() 
 end)
+AddButton("✍️ | SAHTE MESAJ PANELİ", Color3.fromRGB(255, 200, 50), function() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoSahteMesaj.lua"))() 
+end)
 
 -- 2. GENEL HİLELER
 AddLabel("GENEL HİLELER")
