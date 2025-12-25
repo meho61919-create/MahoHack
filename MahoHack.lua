@@ -166,7 +166,7 @@ AddButton("📝 | GRAMER PANELİ", Color3.fromRGB(0, 120, 255), function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/main/MahoGrammar.lua"))() 
 end)
 AddButton("🎭 | TRACK PANELİ", Color3.fromRGB(255, 200, 50), function() 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/main/MahoGrammar.lua"))() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/main/MahoTrack.lua"))() 
 end)
 
 -- 2. GENEL HİLELER
