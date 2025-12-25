@@ -1,6 +1,6 @@
 -- 🔥 MAHO ELITE v11.9 - SCRIPTBLOX ULTIMATE OPTIMIZED (ANIMATED)
 -- 🛡️ meho61919-create | Ultra Quality UI & Animation System
--- 🌪️ Yeni: Detain (Kelepçele-Götür) Modülü Eklendi.
+-- 🌪️ Güncelleme: Orbit, Fling ve Detain Toggle Modülleri Stabilize Edildi.
 
 local player = game:GetService("Players").LocalPlayer
 local coreGui = game:GetService("CoreGui")
@@ -88,12 +88,13 @@ Title.Font = "GothamBold"; Title.TextSize = 22; Title.BackgroundTransparency = 1
 -- [ SCROLLING FRAME ]
 local Scroll = Instance.new("ScrollingFrame", Canvas)
 Scroll.Size = UDim2.new(1, -20, 1, -80); Scroll.Position = UDim2.new(0, 10, 0, 70)
-Scroll.BackgroundTransparency = 1; Scroll.CanvasSize = UDim2.new(0, 0, 0, 1150); Scroll.ScrollBarThickness = 3
+Scroll.BackgroundTransparency = 1; Scroll.CanvasSize = UDim2.new(0, 0, 0, 1300); Scroll.ScrollBarThickness = 3
 local List = Instance.new("UIListLayout", Scroll)
 List.Padding = UDim.new(0, 10); List.SortOrder = Enum.SortOrder.LayoutOrder
 
 -- --- ⚙️ CORE LOGICS ---
 local noclip, infJump, spinBot, magnet, flying = false, false, false, false, false
+local orbitActive, flingActive = false, false
 local flySpeed = 50
 
 local function AddButton(text, color, callback)
@@ -126,20 +127,28 @@ end
 
 -- --- 📋 KOMUTLAR ---
 
--- 0. TP SYSTEM
+-- 0. TP SYSTEM (Hedef Seçici)
 local TPFrame = Instance.new("Frame", Scroll)
 TPFrame.Size = UDim2.new(1, -10, 0, 50); TPFrame.BackgroundTransparency = 1
 local TPInput = Instance.new("TextBox", TPFrame)
-TPInput.Size = UDim2.new(0.65, -5, 1, 0); TPInput.PlaceholderText = "Kullanıcı Adı..."; TPInput.BackgroundColor3 = Color3.fromRGB(25, 25, 30); TPInput.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", TPInput)
+TPInput.Size = UDim2.new(0.65, -5, 1, 0); TPInput.PlaceholderText = "Kurban Adı..."; TPInput.BackgroundColor3 = Color3.fromRGB(25, 25, 30); TPInput.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", TPInput)
 local TPBtn = Instance.new("TextButton", TPFrame)
 TPBtn.Size = UDim2.new(0.35, 0, 1, 0); TPBtn.Position = UDim2.new(0.65, 5, 0, 0); TPBtn.Text = "TP TO"; TPBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255); TPBtn.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", TPBtn)
 
-TPBtn.MouseButton1Click:Connect(function()
+local function getTarget()
     local targetName = TPInput.Text:lower()
     for _, v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1, #targetName) == targetName or v.DisplayName:lower():sub(1, #targetName) == targetName then
-            player.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+            return v
         end
+    end
+    return nil
+end
+
+TPBtn.MouseButton1Click:Connect(function()
+    local target = getTarget()
+    if target and target.Character then
+        player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame
     end
 end)
 
@@ -166,32 +175,67 @@ end)
 AddButton("✍️ | SAHTE MESAJ PANELİ", Color3.fromRGB(150, 150, 255), function() 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoSahteMesaj.lua"))() 
 end)
-AddButton("🎚️ | SES TERÖRÜ PANELİ", Color3.fromRGB(30, 30, 30), function() 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoSesTeror.lua"))() 
-end)
 
 -- 2. GENEL HİLELER
 AddLabel("GENEL HİLELER")
 
-AddButton("⛓️ | GET DETAIN TOOL", Color3.fromRGB(100, 100, 110), function()
-    local tool = Instance.new("Tool")
-    tool.Name = "Maho Detain"
-    tool.RequiresHandle = false
-    tool.Parent = player.Backpack
-    
-    tool.Activated:Connect(function()
-        local mouse = player:GetMouse()
-        local target = mouse.Target
-        if target and target.Parent:FindFirstChild("Humanoid") then
-            local targetChar = target.Parent
-            task.spawn(function()
-                while tool.Parent == player.Character do
-                    targetChar.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -4)
-                    task.wait()
-                end
-            end)
+local currentDetain = nil
+AddToggle("⛓️ | GET DETAIN TOOL", Color3.fromRGB(100, 100, 110), function(v)
+    if v then
+        currentDetain = Instance.new("Tool")
+        currentDetain.Name = "Maho Detain"; currentDetain.RequiresHandle = false; currentDetain.Parent = player.Backpack
+        currentDetain.Activated:Connect(function()
+            local mouse = player:GetMouse()
+            local target = mouse.Target
+            if target and target.Parent:FindFirstChild("Humanoid") then
+                local targetChar = target.Parent
+                task.spawn(function()
+                    while currentDetain and currentDetain.Parent == player.Character do
+                        targetChar.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * UDim2.new(0,0,0,0).new(0, 0, -4) -- Sabit mesafe
+                        targetChar.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                        task.wait()
+                    end
+                end)
+            end
+        end)
+    else
+        if currentDetain then currentDetain:Destroy(); currentDetain = nil end
+    end
+end)
+
+AddToggle("🌀 ORBIT (HEDEFE YAPIŞ)", Color3.fromRGB(130, 0, 255), function(v)
+    orbitActive = v
+    local angle = 0
+    task.spawn(function()
+        while orbitActive do
+            local target = getTarget()
+            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                angle = angle + 0.15
+                player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, angle, 0) * CFrame.new(0, 0, 5)
+            end
+            rs.Stepped:Wait()
         end
     end)
+end)
+
+AddToggle("🚀 INVISIBLE FLING", Color3.fromRGB(255, 0, 0), function(v)
+    flingActive = v
+    if v then
+        task.spawn(function()
+            while flingActive do
+                local target = getTarget()
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if target and target.Character and hrp then
+                    hrp.Velocity = Vector3.new(500000, 500000, 500000)
+                    hrp.CFrame = target.Character.HumanoidRootPart.CFrame
+                end
+                rs.Stepped:Wait()
+            end
+            if player.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+            end
+        end)
+    end
 end)
 
 AddToggle("🦅 FLY MODE", Color3.fromRGB(180, 0, 50), function(v)
