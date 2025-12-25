@@ -1,6 +1,6 @@
--- 🔥 MAHO ELITE v11.9 - SCRIPTBLOX ULTIMATE OPTIMIZED (GÜNCELLENDİ)
+-- 🔥 MAHO ELITE v11.9 - SCRIPTBLOX ULTIMATE OPTIMIZED (ANIMATED)
 -- 🛡️ meho61919-create | Ultra Quality UI & Animation System
--- 🌪️ Yeni: 18+ Anim, Gelişmiş Fly | Temizlik: 99 Nights & Fetch Silindi.
+-- 🌪️ Yeni: TweenService Animasyonları eklendi.
 
 local player = game:GetService("Players").LocalPlayer
 local coreGui = game:GetService("CoreGui")
@@ -16,41 +16,74 @@ if coreGui:FindFirstChild("MahoEliteV11") then coreGui.MahoEliteV11:Destroy() en
 local sg = Instance.new("ScreenGui", coreGui); sg.Name = "MahoEliteV11"; sg.ResetOnSpawn = false
 local Main = Instance.new("Frame", sg)
 
-Main.Size = UDim2.new(0, 380, 0, 500)
-Main.Position = UDim2.new(0.5, -190, 0.5, -250)
+-- Başlangıçta Görünmez ve Küçük (Animasyon Hazırlığı)
+Main.Size = UDim2.new(0, 0, 0, 0)
+Main.Position = UDim2.new(0.5, 0, 0.5, 0)
 Main.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
 Main.Active = true
 Main.Draggable = true
+Main.ClipsDescendants = true
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 15)
 
 local Canvas = Instance.new("CanvasGroup", Main)
 Canvas.Size = UDim2.new(1, 0, 1, 0)
 Canvas.BackgroundTransparency = 1
+Canvas.GroupTransparency = 1 -- Başlangıçta içerik gizli
 Instance.new("UICorner", Canvas).CornerRadius = UDim.new(0, 15)
 
 local Stroke = Instance.new("UIStroke", Main)
 Stroke.Color = Color3.fromRGB(130, 0, 255)
 Stroke.Thickness = 2.5
+Stroke.Transparency = 1
 
 -- [ MINIMIZE & KAPATMA ]
 local OpenBtn = Instance.new("TextButton", sg)
-OpenBtn.Size = UDim2.new(0, 50, 0, 50); OpenBtn.Position = UDim2.new(1, -60, 1, -60)
+OpenBtn.Size = UDim2.new(0, 0, 0, 0) -- Küçük başla
+OpenBtn.Position = UDim2.new(1, -60, 1, -60)
 OpenBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 18); OpenBtn.Text = "M"; OpenBtn.TextColor3 = Color3.fromRGB(130, 0, 255)
 OpenBtn.Font = "GothamBold"; OpenBtn.TextSize = 25; OpenBtn.Visible = false
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(1, 0)
+local OpenStroke = Instance.new("UIStroke", OpenBtn)
+OpenStroke.Color = Color3.fromRGB(130, 0, 255); OpenStroke.Thickness = 2
 
 local CloseBtn = Instance.new("TextButton", Canvas)
 CloseBtn.Size = UDim2.new(0, 30, 0, 30); CloseBtn.Position = UDim2.new(1, -40, 0, 10)
 CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0); CloseBtn.Text = "X"; CloseBtn.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", CloseBtn)
 
-CloseBtn.MouseButton1Click:Connect(function()
-    Main.Visible = false; OpenBtn.Visible = true
-end)
+-- [ ANIMASYON FONKSİYONLARI ]
+local function OpenUI()
+    Main.Visible = true
+    OpenBtn:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Quad", 0.3, true, function() OpenBtn.Visible = false end)
+    
+    tweenService:Create(Main, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Size = UDim2.new(0, 380, 0, 500),
+        Position = UDim2.new(0.5, -190, 0.5, -250)
+    }):Play()
+    
+    task.wait(0.2)
+    tweenService:Create(Canvas, TweenInfo.new(0.4), {GroupTransparency = 0}):Play()
+    tweenService:Create(Stroke, TweenInfo.new(0.4), {Transparency = 0}):Play()
+end
 
-OpenBtn.MouseButton1Click:Connect(function()
-    Main.Visible = true; OpenBtn.Visible = false
-end)
+local function CloseUI()
+    tweenService:Create(Canvas, TweenInfo.new(0.3), {GroupTransparency = 1}):Play()
+    tweenService:Create(Stroke, TweenInfo.new(0.3), {Transparency = 1}):Play()
+    task.wait(0.1)
+    
+    tweenService:Create(Main, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+        Size = UDim2.new(0, 0, 0, 0),
+        Position = UDim2.new(1, -35, 1, -35) -- Logo konumuna doğru küçül
+    }):Play()
+    
+    task.wait(0.5)
+    Main.Visible = false
+    OpenBtn.Visible = true
+    OpenBtn:TweenSize(UDim2.new(0, 50, 0, 50), "Out", "Elastic", 0.6)
+end
+
+CloseBtn.MouseButton1Click:Connect(CloseUI)
+OpenBtn.MouseButton1Click:Connect(OpenUI)
 
 -- [ HEADER ]
 local Title = Instance.new("TextLabel", Canvas)
@@ -163,6 +196,9 @@ AddToggle("🧱 NoClip", Color3.fromRGB(200, 100, 0), function(v) noclip = v end
 -- 3. REJOIN
 AddButton("🔄 REJOIN SERVER", Color3.fromRGB(40, 40, 45), function() ts:Teleport(game.PlaceId) end)
 
+-- --- 🚀 EXECUTION (INTRO) ---
+OpenUI()
+
 -- --- 🚀 LOOP ---
 uis.JumpRequest:Connect(function() if infJump then player.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping") end end)
 rs.Stepped:Connect(function()
@@ -175,4 +211,4 @@ rs.Stepped:Connect(function()
     end
 end)
 
-print("MAHO ELITE v11.9: MODULAR & CLEAN!")
+print("MAHO ELITE v11.9: ANIMATED & READY!")
