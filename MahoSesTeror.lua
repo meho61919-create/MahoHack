@@ -1,62 +1,70 @@
--- 🔥 MAHO AUDIO TERROR MODULE
--- 🛡️ meho61919-create | Anonymous Edition
--- 🔊 Kurbana psikolojik ses saldırısı yapar.
-
+-- 🔥 MAHO AUDIO TERROR v2 - ATTACHMENT SYSTEM
 local player = game:GetService("Players").LocalPlayer
 local sg = Instance.new("ScreenGui", game:GetService("CoreGui"))
-sg.Name = "MahoAudioTerror"
+sg.Name = "MahoAudioV2"
 
 local Main = Instance.new("Frame", sg)
-Main.Size = UDim2.new(0, 280, 0, 250)
-Main.Position = UDim2.new(0.5, -140, 0.4, 0)
-Main.BackgroundColor3 = Color3.fromRGB(15, 10, 10)
+Main.Size = UDim2.new(0, 300, 0, 400)
+Main.Position = UDim2.new(0.5, -150, 0.4, 0)
+Main.BackgroundColor3 = Color3.fromRGB(20, 10, 10)
+Main.Active = true; Main.Draggable = true
 Instance.new("UICorner", Main)
-local Stroke = Instance.new("UIStroke", Main)
-Stroke.Color = Color3.fromRGB(255, 0, 0); Stroke.Thickness = 2
+Instance.new("UIStroke", Main).Color = Color3.fromRGB(255, 0, 0)
 
-local Title = Instance.new("TextLabel", Main)
-Title.Size = UDim2.new(1, 0, 0, 35); Title.Text = "🔊 AUDIO TERROR"; Title.TextColor3 = Color3.new(1,1,1)
-Title.Font = "GothamBold"; Title.BackgroundTransparency = 1
+local Scroll = Instance.new("ScrollingFrame", Main)
+Scroll.Size = UDim2.new(1, -20, 1, -60); Scroll.Position = UDim2.new(0, 10, 0, 50)
+Scroll.BackgroundTransparency = 1; Scroll.CanvasSize = UDim2.new(0, 0, 1.5, 0)
+Scroll.ScrollBarThickness = 3
+local List = Instance.new("UIListLayout", Scroll); List.Padding = UDim.new(0, 8)
 
-local TargetInput = Instance.new("TextBox", Main)
-TargetInput.Size = UDim2.new(0.9, 0, 0, 35); TargetInput.Position = UDim2.new(0.05, 0, 0.2, 0)
-TargetInput.PlaceholderText = "Kurban Adı..."; TargetInput.BackgroundColor3 = Color3.fromRGB(30, 20, 20)
-TargetInput.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", TargetInput)
+local TargetInput = Instance.new("TextBox", Scroll)
+TargetInput.Size = UDim2.new(1, 0, 0, 40); TargetInput.PlaceholderText = "Kurban Adı..."
+TargetInput.BackgroundColor3 = Color3.fromRGB(40, 20, 20); TargetInput.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", TargetInput)
 
--- [ SES FONKSİYONU ]
-local function PlayTerror(soundId, volume)
+local function PlayTerror(id)
     local targetName = TargetInput.Text:lower()
+    local target = nil
     for _, v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1, #targetName) == targetName and v.Character then
-            local root = v.Character:FindFirstChild("HumanoidRootPart")
-            if root then
-                local s = Instance.new("Sound", root)
-                s.SoundId = "rbxassetid://" .. soundId
-                s.Volume = volume or 5
-                s.Pitch = 0.8 -- Daha korkunç ve kalın ses
-                s:Play()
-                s.Ended:Connect(function() s:Destroy() end)
+        if v.Name:lower():sub(1, #targetName) == targetName then target = v break end
+    end
+
+    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        -- SESİ KENDİNE OLUŞTUR AMA KURBANA YAPIŞTIR
+        local soundPart = Instance.new("Part", workspace)
+        soundPart.Transparency = 1; soundPart.CanCollide = false; soundPart.Anchored = false
+        
+        local sound = Instance.new("Sound", soundPart)
+        sound.SoundId = "rbxassetid://" .. id
+        sound.Volume = 10; sound.Looped = false; sound:Play()
+        
+        -- Kurbanın kafasına takip ettir
+        task.spawn(function()
+            while sound.IsPlaying do
+                if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    soundPart.CFrame = target.Character.HumanoidRootPart.CFrame
+                end
+                task.wait()
             end
-        end
+            soundPart:Destroy()
+        end)
     end
 end
 
--- [ BUTONLAR ]
-local function CreateBtn(text, id, pos, vol)
-    local btn = Instance.new("TextButton", Main)
-    btn.Size = UDim2.new(0.9, 0, 0, 35); btn.Position = pos
-    btn.Text = text; btn.BackgroundColor3 = Color3.fromRGB(40, 20, 20)
-    btn.TextColor3 = Color3.new(1,1,1); btn.Font = "GothamBold"
-    Instance.new("UICorner", btn)
-    btn.MouseButton1Click:Connect(function() PlayTerror(id, vol) end)
+local function AddSnd(txt, id)
+    local b = Instance.new("TextButton", Scroll)
+    b.Size = UDim2.new(1, 0, 0, 45); b.Text = txt; b.BackgroundColor3 = Color3.fromRGB(60, 20, 20)
+    b.TextColor3 = Color3.new(1,1,1); b.Font = "GothamBold"
+    Instance.new("UICorner", b)
+    b.MouseButton1Click:Connect(function() PlayTerror(id) end)
 end
 
-CreateBtn("💀 ÇIĞLIK (JUMPSCARE)", "5567523620", UDim2.new(0.05, 0, 0.4, 0), 10)
-CreateBtn("👣 NEFES SESİ", "154563032", UDim2.new(0.05, 0, 0.58, 0), 3)
-CreateBtn("📺 PARAZİT / STATIC", "165430869", UDim2.new(0.05, 0, 0.76, 0), 5)
+AddSnd("💀 JUMPSCARE SCREAM", "5567523620")
+AddSnd("👣 PSYCHO BREATHING", "154563032")
+AddSnd("📺 STATIC NOISE", "165430869")
+AddSnd("👻 CREEPY WHISPER", "142445851")
+AddSnd("🚪 KNOCKING", "142445851")
 
--- Kapatma
 local X = Instance.new("TextButton", Main)
-X.Size = UDim2.new(0, 25, 0, 25); X.Position = UDim2.new(1, -30, 0, 5)
-X.Text = "×"; X.TextColor3 = Color3.new(1,1,1); X.BackgroundTransparency = 1; X.TextSize = 25
+X.Size = UDim2.new(0, 30, 0, 30); X.Position = UDim2.new(1, -35, 0, 5); X.Text = "X"; X.TextColor3 = Color3.new(1,1,1); X.BackgroundTransparency = 1
 X.MouseButton1Click:Connect(function() sg:Destroy() end)
