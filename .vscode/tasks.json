@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "GİZLE VE GÖNDER",
+            "type": "shell",
+            "command": "luamin -f MahoHack.lua > MahoHack_obf.lua ; git add . ; git commit -m 'Auto Obfuscate' ; git push origin main",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "focus": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
