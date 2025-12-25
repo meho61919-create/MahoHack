@@ -163,8 +163,11 @@ end)
 AddButton("🎭 | TRACK PANELİ", Color3.fromRGB(255, 200, 50), function() 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoTrack.lua"))() 
 end)
-AddButton("✍️ | SAHTE MESAJ PANELİ", Color3.fromRGB(255, 200, 50), function() 
+AddButton("✍️ | SAHTE MESAJ PANELİ", Color3.fromRGB(150, 150, 255), function() 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoSahteMesaj.lua"))() 
+end)
+AddButton("🎚️ | SES TERÖRÜ PANELİ", Color3.fromRGB(30, 30, 30), function() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoSesTeror.lua"))() 
 end)
 
 -- 2. GENEL HİLELER
