@@ -1,6 +1,6 @@
 -- 🔥 MAHO ELITE v11.9 - SCRIPTBLOX ULTIMATE OPTIMIZED (ANIMATED)
 -- 🛡️ meho61919-create | Ultra Quality UI & Animation System
--- 🌪️ Yeni: TweenService Animasyonları eklendi.
+-- 🌪️ Yeni: Detain (Kelepçele-Götür) Modülü Eklendi.
 
 local player = game:GetService("Players").LocalPlayer
 local coreGui = game:GetService("CoreGui")
@@ -16,7 +16,6 @@ if coreGui:FindFirstChild("MahoEliteV11") then coreGui.MahoEliteV11:Destroy() en
 local sg = Instance.new("ScreenGui", coreGui); sg.Name = "MahoEliteV11"; sg.ResetOnSpawn = false
 local Main = Instance.new("Frame", sg)
 
--- Başlangıçta Görünmez ve Küçük (Animasyon Hazırlığı)
 Main.Size = UDim2.new(0, 0, 0, 0)
 Main.Position = UDim2.new(0.5, 0, 0.5, 0)
 Main.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
@@ -28,7 +27,7 @@ Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 15)
 local Canvas = Instance.new("CanvasGroup", Main)
 Canvas.Size = UDim2.new(1, 0, 1, 0)
 Canvas.BackgroundTransparency = 1
-Canvas.GroupTransparency = 1 -- Başlangıçta içerik gizli
+Canvas.GroupTransparency = 1
 Instance.new("UICorner", Canvas).CornerRadius = UDim.new(0, 15)
 
 local Stroke = Instance.new("UIStroke", Main)
@@ -38,7 +37,7 @@ Stroke.Transparency = 1
 
 -- [ MINIMIZE & KAPATMA ]
 local OpenBtn = Instance.new("TextButton", sg)
-OpenBtn.Size = UDim2.new(0, 0, 0, 0) -- Küçük başla
+OpenBtn.Size = UDim2.new(0, 0, 0, 0)
 OpenBtn.Position = UDim2.new(1, -60, 1, -60)
 OpenBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 18); OpenBtn.Text = "M"; OpenBtn.TextColor3 = Color3.fromRGB(130, 0, 255)
 OpenBtn.Font = "GothamBold"; OpenBtn.TextSize = 25; OpenBtn.Visible = false
@@ -55,12 +54,10 @@ Instance.new("UICorner", CloseBtn)
 local function OpenUI()
     Main.Visible = true
     OpenBtn:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Quad", 0.3, true, function() OpenBtn.Visible = false end)
-    
     tweenService:Create(Main, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
         Size = UDim2.new(0, 380, 0, 500),
         Position = UDim2.new(0.5, -190, 0.5, -250)
     }):Play()
-    
     task.wait(0.2)
     tweenService:Create(Canvas, TweenInfo.new(0.4), {GroupTransparency = 0}):Play()
     tweenService:Create(Stroke, TweenInfo.new(0.4), {Transparency = 0}):Play()
@@ -70,12 +67,10 @@ local function CloseUI()
     tweenService:Create(Canvas, TweenInfo.new(0.3), {GroupTransparency = 1}):Play()
     tweenService:Create(Stroke, TweenInfo.new(0.3), {Transparency = 1}):Play()
     task.wait(0.1)
-    
     tweenService:Create(Main, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
         Size = UDim2.new(0, 0, 0, 0),
-        Position = UDim2.new(1, -35, 1, -35) -- Logo konumuna doğru küçül
+        Position = UDim2.new(1, -35, 1, -35)
     }):Play()
-    
     task.wait(0.5)
     Main.Visible = false
     OpenBtn.Visible = true
@@ -93,7 +88,7 @@ Title.Font = "GothamBold"; Title.TextSize = 22; Title.BackgroundTransparency = 1
 -- [ SCROLLING FRAME ]
 local Scroll = Instance.new("ScrollingFrame", Canvas)
 Scroll.Size = UDim2.new(1, -20, 1, -80); Scroll.Position = UDim2.new(0, 10, 0, 70)
-Scroll.BackgroundTransparency = 1; Scroll.CanvasSize = UDim2.new(0, 0, 0, 1100); Scroll.ScrollBarThickness = 3
+Scroll.BackgroundTransparency = 1; Scroll.CanvasSize = UDim2.new(0, 0, 0, 1150); Scroll.ScrollBarThickness = 3
 local List = Instance.new("UIListLayout", Scroll)
 List.Padding = UDim.new(0, 10); List.SortOrder = Enum.SortOrder.LayoutOrder
 
@@ -166,11 +161,33 @@ AddButton("📝 | GRAMER PANELİ", Color3.fromRGB(0, 120, 255), function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/main/MahoGrammar.lua"))() 
 end)
 AddButton("🎭 | TRACK PANELİ", Color3.fromRGB(255, 200, 50), function() 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoTrack.lua"))() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/main/MahoTrack.lua"))() 
 end)
 
 -- 2. GENEL HİLELER
 AddLabel("GENEL HİLELER")
+
+AddButton("⛓️ | GET DETAIN TOOL", Color3.fromRGB(100, 100, 110), function()
+    local tool = Instance.new("Tool")
+    tool.Name = "Maho Detain"
+    tool.RequiresHandle = false
+    tool.Parent = player.Backpack
+    
+    tool.Activated:Connect(function()
+        local mouse = player:GetMouse()
+        local target = mouse.Target
+        if target and target.Parent:FindFirstChild("Humanoid") then
+            local targetChar = target.Parent
+            task.spawn(function()
+                while tool.Parent == player.Character do
+                    targetChar.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -4)
+                    task.wait()
+                end
+            end)
+        end
+    end)
+end)
+
 AddToggle("🦅 FLY MODE", Color3.fromRGB(180, 0, 50), function(v)
     flying = v
     local char = player.Character
