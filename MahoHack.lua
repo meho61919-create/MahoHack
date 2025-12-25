@@ -161,7 +161,7 @@ AddButton("📝 | GRAMER PANELİ", Color3.fromRGB(0, 120, 255), function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/main/MahoGrammar.lua"))() 
 end)
 AddButton("🎭 | TRACK PANELİ", Color3.fromRGB(255, 200, 50), function() 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/main/MahoTrack.lua"))() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoTrack.lua"))() 
 end)
 
 -- 2. GENEL HİLELER
@@ -207,7 +207,7 @@ AddToggle("🦅 FLY MODE", Color3.fromRGB(180, 0, 50), function(v)
     end
 end)
 
-AddToggle("🎁 Infinite Jump", Color3.fromRGB(200, 150, 0), function(v) infJump = v end)
+AddToggle("👻 Infinite Jump", Color3.fromRGB(200, 150, 0), function(v) infJump = v end)
 AddToggle("🌀 Spin Bot", Color3.fromRGB(200, 150, 0), function(v) spinBot = v end)
 AddToggle("🧲 Item Magnet", Color3.fromRGB(200, 150, 0), function(v) magnet = v end)
 AddToggle("🏃 Speed Hack", Color3.fromRGB(0, 180, 120), function(v) player.Character.Humanoid.WalkSpeed = v and 80 or 16 end)
