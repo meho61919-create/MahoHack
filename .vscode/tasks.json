@@ -4,7 +4,7 @@
         {
             "label": "GİZLE VE GÖNDER",
             "type": "shell",
-            "command": "luamin -f MahoHack.lua > MahoHack_obf.lua ; git add . ; git commit -m 'Auto Obfuscate' ; git push origin main",
+            "command": "luamin -f MahoHack.lua > MahoHack_obf.lua ; git add . ; git commit -m 'Auto Obfuscate' ; git push origin main --force",
             "group": {
                 "kind": "build",
                 "isDefault": true
