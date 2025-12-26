@@ -2,8 +2,8 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "🎯 MAHO ELITE | TA Desert Operation",
-   LoadingTitle = "Maho Elite Sistemleri Yükleniyor...",
-   LoadingSubtitle = "by Maho",
+   LoadingTitle = "Maho Elite Güvenlik Sistemleri...",
+   LoadingSubtitle = "Hacker Modu Aktif Ediliyor",
    ConfigurationSaving = {
       Enabled = true,
       FolderName = "MahoElite", 
@@ -14,45 +14,48 @@ local Window = Rayfield:CreateWindow({
       Invite = "", 
       RememberJoins = true 
    },
-   KeySystem = false -- Burayı true yaparsan anahtar ekleyebiliriz
+   KeySystem = false 
 })
 
+-- TEMA AYARI: Green (Hacker Teması)
+Rayfield:SetTheme("Green")
+
 -- SEKMELER
-local InfoTab = Window:CreateTab("📜 Bilgiler", 4483362458) -- İkon: Dosya
-local MainTab = Window:CreateTab("🚀 Operasyon", 4483345998) -- İkon: Roket
+local MainTab = Window:CreateTab("💀 Ana Terminal", 4483345998) 
+local InfoTab = Window:CreateTab("📜 Protokol", 4483362458)
 
--- BİLGİ SEKMESİ İÇERİĞİ
-InfoTab:CreateSection("Gereksinimler")
-InfoTab:CreateLabel("• Rütbe: OR-2 Zorunludur")
-InfoTab:CreateLabel("• Harita: Çöl (Desert)")
-InfoTab:CreateParagraph({Title = "Nasıl Çalışır?", Content = "Metrodan Çöl haritasına girin. Operasyonu başlat butonuna basın. Karakteriniz otomatik olarak her saniye 5 NPC'yi etkisiz hale getirecektir."})
+-- BİLGİ SEKMESİ
+InfoTab:CreateSection("Sistem Gereksinimleri")
+InfoTab:CreateLabel("• Yetki Düzeyi: OR-2 (Zorunlu)")
+InfoTab:CreateLabel("• Operasyon Alanı: Çöl (Desert)")
+InfoTab:CreateParagraph({Title = "Maho Elite Talimatı", Content = "Metrodan Çöl haritasına giriş yaptıktan sonra 'Sistemi Başlat' komutunu verin. Anti-Ban protokolü gereği saniyede 5 NPC imha edilecektir."})
 
--- ANA MENÜ İÇERİĞİ
-MainTab:CreateSection("Otomasyon Kontrolleri")
+-- ANA MENÜ
+MainTab:CreateSection("İmha Protokolleri")
 
 local isOperating = false
 MainTab:CreateButton({
-   Name = "⚡ OPERASYONU BAŞLAT",
+   Name = "⚡ OPERASYONU (SİSTEMİ) BAŞLAT",
    Callback = function()
       if isOperating then 
-         Rayfield:Notify({Title = "Uyarı", Content = "Operasyon zaten devam ediyor!", Duration = 3})
+         Rayfield:Notify({Title = "SİSTEM UYARISI", Content = "Zaten bir operasyon yürütülüyor!", Duration = 3, Image = 4483362458})
          return 
       end
       
       isOperating = true
       Rayfield:Notify({
-         Title = "OPERASYON BAŞLADI",
-         Content = "Maho Elite birimleri bölgeyi temizliyor...",
+         Title = "ERİŞİM SAĞLANDI",
+         Content = "NPC imha protokolü devreye girdi...",
          Duration = 5,
          Image = 4483345998,
       })
 
       -- ANA MANTIK
       local npcFolder = workspace:FindFirstChild("NPCs") or workspace:FindFirstChild("Enemies")
-      local damageRemote = game.ReplicatedStorage:FindFirstChild("DamageEvent") -- DEX İLE BURAYI KONTROL ET
+      local damageRemote = game.ReplicatedStorage:FindFirstChild("DamageEvent") -- BURAYI DEX İLE GÜNCELLEMEYİ UNUTMA
 
       if not npcFolder then
-         Rayfield:Notify({Title = "HATA", Content = "NPC Klasörü Bulunamadı!", Duration = 5})
+         Rayfield:Notify({Title = "HATA", Content = "Hedef klasörü bulunamadı!", Duration = 5})
          isOperating = false
          return
       end
@@ -61,42 +64,47 @@ MainTab:CreateButton({
       for i, npc in pairs(enemies) do
           if npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 then
               
-              -- Karakter ve Pozisyon
               local player = game.Players.LocalPlayer
               local root = player.Character.HumanoidRootPart
               
-              -- Havada süzülme efekti (Tween ile daha profesyonel)
-              local tween = game:GetService("TweenService"):Create(root, TweenInfo.new(0.5), {CFrame = npc.HumanoidRootPart.CFrame * CFrame.new(0, 15, 0)})
-              tween:Play()
+              -- Havada suikast pozisyonu
+              root.CFrame = npc.HumanoidRootPart.CFrame * CFrame.new(0, 15, 0)
               
-              -- Öldürme sinyali
+              -- İmha Sinyali
               if damageRemote then
                   damageRemote:FireServer(npc.Humanoid, 100)
               end
 
-              task.wait(0.2) -- Saniyede 5 kişi hızı
+              task.wait(0.2) -- Saniyede 5 kişi (Hacker hızı)
           end
       end
 
       isOperating = false
       Rayfield:Notify({
-         Title = "GÖREV TAMAMLANDI",
-         Content = "Bölge temizlendi, Maho Elite gururla sunar.",
+         Title = "OPERASYON TAMAM",
+         Content = "Tüm hedefler temizlendi. Sistem çıkışı yapılıyor.",
          Duration = 5,
          Image = 4483362458,
       })
    end,
 })
 
-MainTab:CreateSection("Ayarlar")
+MainTab:CreateSection("Manuel Ayarlar")
 MainTab:CreateSlider({
-   Name = "Öldürme Hızı (Saniye)",
+   Name = "İmha Gecikmesi (Delay)",
    Range = {0.1, 1},
    Increment = 0.1,
    Suffix = "sn",
    CurrentValue = 0.2,
    Flag = "KillDelay", 
    Callback = function(Value)
-      -- Bu değer yukarıdaki task.wait(0.2) yerine kullanılabilir
+      -- Bu değer ile hızı oyun içinde değiştirebilirsin
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "❌ MENÜYÜ KAPAT",
+   Callback = function()
+      Rayfield:Destroy()
    end,
 })
