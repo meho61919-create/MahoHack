@@ -188,7 +188,9 @@ end)
 AddButton("✍️ | SAHTE MESAJ PANELİ", Color3.fromRGB(150, 150, 255), function() 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoSahteMesaj.lua"))() 
 end)
-
+AddButton("✍️ | SAHTE MESAJ PANELİ", Color3.fromRGB(150, 150, 255), function() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/meho61919-create/MahoHack/refs/heads/main/MahoTeam.lua"))() 
+end)
 -- 2. ÖZEL HİLELER (YENİ)
 AddLabel("ELITE HİLELER")
 
