@@ -98,7 +98,8 @@ MainTab:CreateSlider({
    CurrentValue = 0.2,
    Flag = "KillDelay", 
    Callback = function(Value)
-      -- Bu değer ile hızı oyun içinde değiştirebilirsin
+      -- Bu değer ile hızı oyun içinde degiatirme
+         
    end,
 })
 
